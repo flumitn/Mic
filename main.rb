@@ -2,7 +2,6 @@
 require_relative 'lib/mic.rb'
 require 'mic/neologd'
 require 'mic/wikipedia'
-require 'sqlite3'
 
 starttime = Time.now
 
@@ -16,11 +15,8 @@ mic.prepare
 puts "Decompress complete NEologd's seed files"
 mic.thread
 
-db_file = File.join(SourcePath, 'data', 'data.sqlite3')
-sqlite = SQLite3::Database.open(db_file)
-sqlite.execute "CREATE TABLE IF NOT EXISTS meta(word TEXT UNIQUE, meta TEXT, word_class TEXT, wikipedia_meta TEXT)"
-#sqlite.transaction
-
+file_path = File.join(SourcePath, 'data', 'data.txt')
+data_file = File.open(file_path, "w")
 mic.read('user-dict') do |queue, file|
   puts "Loading #{file}"
   tmp = nil
@@ -28,19 +24,18 @@ mic.read('user-dict') do |queue, file|
 #    print "\rcomplete #{i+1} lines"
     data = queue.pop
     if data == :end
-      #sqlite.commit
-      sqlite.close
+      data_file.close
       break
     end
     next if tmp == (tmp2 = data[0].downcase)
     tmp = tmp2
-    sqlite.execute "INSERT INTO meta VALUES (?,?,?,?)", [data[0], data[10], data[4], wiki_meta[data].nil? ? nil : wiki_meta[data].join(",")]
+    data_file.puts [data[0], data[10], data[4], wiki_meta[data].nil? ? nil : wiki_meta[data].join(",")].join("\t")
   end
 end
 
 
 puts "All completed"
-puts "Data is saved to #{db_file}"
+puts "Data is saved to #{file_path}"
 
 margin = Time.now - starttime
 marginmin = (margin / 60).truncate
