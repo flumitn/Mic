@@ -17,7 +17,6 @@ puts "Decompress complete NEologd's seed files"
 mic.thread
 
 db_file = File.join(SourcePath, 'data', 'data.sqlite3')
-File.unlink db_file
 sqlite = SQLite3::Database.open(db_file)
 sqlite.execute "CREATE TABLE IF NOT EXISTS meta(word TEXT UNIQUE, meta TEXT, word_class TEXT, wikipedia_meta TEXT)"
 #sqlite.transaction

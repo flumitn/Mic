@@ -1,5 +1,9 @@
 # Mic
 
+##Require
+	wget
+	git
+
 ## Installation
 
 
