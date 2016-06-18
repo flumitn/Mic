@@ -3,3 +3,4 @@
 /.project
 /jawiki-20160601-abstract.xml
 /data/*
+!/data/.gitkeep
