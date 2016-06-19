@@ -29,7 +29,7 @@ mic.read('user-dict') do |queue, file|
     end
     next if tmp == (tmp2 = data[0].downcase)
     tmp = tmp2
-    data_file.puts [data[0], data[10], data[4], wiki_meta[data].nil? ? nil : wiki_meta[data].join(",")].join("\t")
+    data_file.puts [data[0], data[10], data[4], wiki_meta[data[10]].nil? ? nil : wiki_meta[data[10]].join(",")].join("\t")
   end
 end
 
